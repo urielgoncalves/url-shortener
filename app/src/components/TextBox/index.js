@@ -1,10 +1,10 @@
-import React from 'react'
-import './index.css'
+import React from 'react';
+import './index.css';
 
-const TextBox = ({id, name, placeholder, onChange, readonly}) => {
+const TextBox = ({id, name, placeholder, onChange, readonly, value, disabled}) => {
     return (
-        <input type='text' id={id} name={name} placeholder={placeholder} onChange={onChange} autoComplete='off' readOnly={readonly} />
+        <input type='text' id={id} name={name} placeholder={placeholder} value={value} onChange={onChange} autoComplete='off' readOnly={readonly} disabled={disabled} />
     );
 }
 
-export default TextBox
+export default TextBox;
