@@ -3,11 +3,13 @@
 
 
 ## Backend
+Directory: /UrlShortenerAPI \
 https://localhost:5001/ \
 VSCode: dotnet run \
 It can also be run via Visual Studio
 
 ## Frontend
+Directory: /app \
 http://localhost:3000/
 
 npm install \
