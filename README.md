@@ -23,4 +23,7 @@ npm start
 -Generate Docker images \
 -Validate url's \
 -Refactoring unique ID for URL's \
--Review react components 
+-Review react components \
+-Add TTL for short URL's \
+-Add database \
+-Add distributed cache for scalability
