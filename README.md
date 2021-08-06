@@ -8,6 +8,8 @@ https://localhost:5001/ \
 VSCode: dotnet run \
 It can also be run via Visual Studio
 
+Ps: For now the information are in memory cache.
+
 ## Frontend
 Directory: /app \
 http://localhost:3000/
