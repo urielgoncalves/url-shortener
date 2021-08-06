@@ -20,13 +20,13 @@ namespace UrlShortenerAPI.Controllers_v1
         }
 
         [HttpPost]
-        public IActionResult Post(string url)
+        public IActionResult Post([FromBody]UrlRequest originalUrl)
         {
-            if (string.IsNullOrWhiteSpace(url))
+            if (originalUrl == null)
                 return BadRequest(new { error = "Empty url" });
 
             // Generate ID for the short URL
-            UrlResponse response = _shortenerService.GenerateShortUrl(url);
+            UrlResponse response = _shortenerService.GenerateShortUrl(originalUrl.Url);
 
             return Created(response.ShortUrl, response);
         }

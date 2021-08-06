@@ -17,6 +17,7 @@ namespace UrlShortenerAPI
 {
     public class Startup
     {
+        readonly string _CORSPolicy = "app";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,6 +28,13 @@ namespace UrlShortenerAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options=> {
+                options.AddPolicy(_CORSPolicy, builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000").AllowAnyHeader();
+                });
+            });
+
             services.AddScoped<IShortenerService, ShortenerService>();
             services.AddMemoryCache();
             services.AddControllers().AddNewtonsoftJson();
@@ -49,6 +57,7 @@ namespace UrlShortenerAPI
             app.UseHttpsRedirection();
             
             app.UseRouting();
+            app.UseCors(_CORSPolicy);
 
             app.UseAuthorization();
 
@@ -56,6 +65,8 @@ namespace UrlShortenerAPI
             {
                 endpoints.MapControllers();
             });
+
+            
         }
     }
 }
