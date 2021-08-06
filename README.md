@@ -3,20 +3,20 @@
 
 
 ## Backend
-https://localhost:5001/
-VSCode: dotnet run
+https://localhost:5001/ \
+VSCode: dotnet run \
 It can also be run via Visual Studio
 
 ## Frontend
 http://localhost:3000/
 
-npm install
+npm install \
 npm start
 
 
 ## Next steps:
--Add unit tests on Backend side
--Generate Docker images
--Validate url's
--Refactoring unique ID for URL's
--Review react components
+-Add unit tests on Backend side \
+-Generate Docker images \
+-Validate url's \
+-Refactoring unique ID for URL's \
+-Review react components 
