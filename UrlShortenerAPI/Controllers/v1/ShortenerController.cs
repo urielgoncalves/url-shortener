@@ -20,27 +20,20 @@ namespace UrlShortenerAPI.Controllers_v1
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]UrlRequest originalUrl)
+        public async Task<IActionResult> Post([FromBody]UrlRequest urlRequest)
         {
-            if (originalUrl == null)
+            if (urlRequest == null)
                 return BadRequest(new { error = "Empty url" });
 
-            // Generate ID for the short URL
-            UrlResponse response = _shortenerService.GenerateShortUrl(originalUrl.Url);
+            UrlResponse response = await _shortenerService.GenerateShortUrl(urlRequest.Url);
 
-            return Created(response.ShortUrl, response);
-        }
-
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok(_shortenerService.GetGenenatedUrls());
+            return Created(response?.ShortUrl, response);
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
-            string originalUrl = _shortenerService.GetOriginalUrl(id);
+            string originalUrl = await _shortenerService.GetOriginalUrl(id);
 
             if (string.IsNullOrEmpty(originalUrl))
                 return NotFound(id);

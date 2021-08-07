@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UrlShortenerAPI.Models;
 
 namespace UrlShortenerAPI.Services
@@ -18,29 +19,28 @@ namespace UrlShortenerAPI.Services
             _cache = cache;
         }
 
-        public UrlResponse GenerateShortUrl(string url)
+        public Task<UrlResponse> GenerateShortUrl(string url)
         {
+            if (string.IsNullOrEmpty(url))
+                return Task.FromResult<UrlResponse>(null);
+
             string shortUrlId = GenerateUniqueID();
             _cache.Set(shortUrlId, HandleUrlProtocol(url));
 
-            return new UrlResponse(url, BuildShortUrl(shortUrlId));
+            return Task.FromResult(new UrlResponse(url, shortUrlId));
         }
 
-        public IEnumerable<string> GetGenenatedUrls()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetOriginalUrl(string id)
+        public Task<string> GetOriginalUrl(string id)
         {
             if (!_cache.TryGetValue(id, out string originalUrl))
-                return null;
+                return Task.FromResult<string>(null);
 
-            return originalUrl;
+            return Task.FromResult(originalUrl);
         }
 
         private string GenerateUniqueID()
         {
+            //TODO: generate algotithm
             var ticks = new DateTime(2021, 1, 1).Ticks;
             var ans = DateTime.Now.Ticks - ticks;
             var uniqueId = ans.ToString("x");

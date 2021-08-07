@@ -7,7 +7,7 @@ const Form = () => {
     const [original, setOriginal] = useState('');
     const [short, setShort] = useState('');
     const [message, setMessage] = useState('');
-    const API_URL = 'https://localhost:5001';
+    const API_URL = 'https://localhost:5001/shortener';
 
     useEffect(()=>{
         console.log(original);
@@ -29,10 +29,10 @@ const Form = () => {
             body: JSON.stringify({url : original})
         };
 
-        fetch(API_URL + '/shortener', requestOptions)
+        fetch(API_URL, requestOptions)
         .then(response => response.json())
         .then(data => {
-            setShort(data.short_url);
+            setShort(`${API_URL}/${data.short_url}`);
         })
         .catch(error => {
             setMessage(`It was not possible to perform this operation on ${API_URL}`);
