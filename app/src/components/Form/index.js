@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import TextBox from '../TextBox';
 import Button from '../Button';
 import './index.css';
+import {API_URL} from '../../config/config';
 
 const Form = () => {
     const [original, setOriginal] = useState('');
     const [short, setShort] = useState('');
     const [message, setMessage] = useState('');
-    const API_URL = 'https://localhost:5001/shortener';
 
     useEffect(()=>{
         console.log(original);

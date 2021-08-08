@@ -11,8 +11,8 @@ It can also be run via Visual Studio
 Ps: For now the information are in memory cache.
 
 ### Running on Docker
-docker build -t urlshortenerapi:dev .
-docker run -dt -p 5000:80 -p 5001:443 urlshortenerapi:dev
+UrlShortenerAPI$ docker build -t urlshortenerapi:dev . \
+UrlShortenerAPI$ docker run --rm -dt -p 5000:80 -p 5001:443 urlshortenerapi:dev
 http://localhost:5000/
 
 
@@ -24,12 +24,14 @@ npm install \
 npm start
 
 
-## Next steps:
--Add unit tests on Backend side \
--Generate Docker images \
+### Running on Docker
+app$ docker build -t url-shortener-app:dev . \
+app$ docker run --rm -p 3000:3000 url-shortener-app:dev
+
+
+## Future improvements:
 -Validate url's \
--Refactoring unique ID for URL's \
--Review react components \
+-Improve unique ID algorithm for URL's \
 -Add TTL for short URL's \
 -Add database \
 -Add distributed cache for scalability
