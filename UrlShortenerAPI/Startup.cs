@@ -65,8 +65,6 @@ namespace UrlShortenerAPI
             {
                 endpoints.MapControllers();
             });
-
-            
         }
     }
 }

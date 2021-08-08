@@ -36,7 +36,7 @@ namespace UrlShortenerAPI.Controllers_v1
             string originalUrl = await _shortenerService.GetOriginalUrl(id);
 
             if (string.IsNullOrEmpty(originalUrl))
-                return NotFound(id);
+                return NotFound($"Url not found: {id}");
 
             return Redirect(originalUrl);
         }
