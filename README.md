@@ -11,8 +11,8 @@ It can also be run via Visual Studio
 Ps: For now the information are in memory cache.
 
 ### Running on Docker
-UrlShortenerAPI$ docker build -t urlshortenerapi:dev . \
-UrlShortenerAPI$ docker run --rm -dt -p 5000:80 -p 5001:443 urlshortenerapi:dev
+UrlShortenerAPI$ docker build -t url-shortener-api:dev . \
+UrlShortenerAPI$ docker run --rm -dt -p 5000:80 -p 5001:443 url-shortener-api:dev
 http://localhost:5000/
 
 

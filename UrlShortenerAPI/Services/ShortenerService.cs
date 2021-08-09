@@ -9,13 +9,10 @@ namespace UrlShortenerAPI.Services
 {
     public class ShortenerService : IShortenerService
     {
-        private const string BASE_SHORT_URL_KEY = "BaseShortUrl";
-        private readonly IConfiguration _configuration;
         private readonly IMemoryCache _cache;
 
-        public ShortenerService(IConfiguration configuration, IMemoryCache cache)
+        public ShortenerService(IMemoryCache cache)
         {
-            _configuration = configuration; 
             _cache = cache;
         }
 
@@ -24,8 +21,10 @@ namespace UrlShortenerAPI.Services
             if (string.IsNullOrEmpty(url))
                 return Task.FromResult<UrlResponse>(null);
 
-            string shortUrlId = GenerateUniqueID();
-            _cache.Set(shortUrlId, HandleUrlProtocol(url));
+            string shortUrlId = GenerateUniqueIDByOriginalUrl(url);
+            
+            if (!_cache.TryGetValue(shortUrlId, out _))
+                _cache.Set(shortUrlId, HandleUrlProtocol(url));
 
             return Task.FromResult(new UrlResponse(url, shortUrlId));
         }
@@ -48,6 +47,21 @@ namespace UrlShortenerAPI.Services
             return uniqueId;
         }
 
+        private string GenerateUniqueIDByOriginalUrl(string url)
+        {
+            int asciiStart = 31;
+
+            int index = url.Length - 1;
+            long hash = 0;
+            while (index >= 0)
+            {
+                hash = (hash * asciiStart) + url[index];
+                --index;
+            }
+
+            return hash.ToString("x");
+        }
+
         private static string HandleUrlProtocol(string url)
         {
             if (!url.StartsWith("http"))
@@ -55,10 +69,5 @@ namespace UrlShortenerAPI.Services
 
             return url;
         }
-
-        private string BuildShortUrl(string shortUrlId) =>
-            string.Format(
-                _configuration.GetValue<string>(BASE_SHORT_URL_KEY).ToString()
-                , shortUrlId);
     }
 }

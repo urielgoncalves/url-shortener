@@ -19,6 +19,7 @@ namespace UrlShortenerAPI.Tests.Services
         private Mock<IShortenerService> _shortenerService;
         private IConfiguration _configuration;
         private IMemoryCache _cache;
+        private IShortenerService _shortenerServiceInstance;
 
         [TestInitialize]
         public void TestInitialize()
@@ -26,8 +27,9 @@ namespace UrlShortenerAPI.Tests.Services
             _shortenerService = new Mock<IShortenerService>();
             _configuration = ConfigurationBuilderTest.Build();
             _cache = new MemoryCache(new MemoryCacheOptions());
+            _shortenerServiceInstance = new ShortenerService(_cache);
         }
-        
+
         [TestMethod]
         public void ShouldGenerateShortUrl()
         {
@@ -38,14 +40,32 @@ namespace UrlShortenerAPI.Tests.Services
             _shortenerService.Setup(m => m.GenerateShortUrl(originalUrl))
                 .ReturnsAsync(new UrlResponse(originalUrl, shortUrl));
 
-            var serviceCall = new ShortenerService(_configuration, _cache);
-
             // Act
-            var result = serviceCall.GenerateShortUrl(originalUrl).Result;
+            var result = _shortenerServiceInstance.GenerateShortUrl(originalUrl).Result;
 
             // Assert
             Assert.IsNotNull(result);
             Assert.IsTrue(!string.IsNullOrEmpty(result.ShortUrl));
+        }
+
+
+        [TestMethod]
+        public void ShouldValidateIfGeneratedUrlIdAreTheSameForAURL()
+        {
+            //Arrange
+            string originalUrl = "www.google.com";
+            string shortUrl = "";
+
+            _shortenerService.Setup(m => m.GenerateShortUrl(originalUrl))
+                .ReturnsAsync(new UrlResponse(originalUrl, shortUrl));
+
+            // Act
+            UrlResponse firstCall = _shortenerServiceInstance.GenerateShortUrl(originalUrl).Result;
+            UrlResponse secondCall = _shortenerServiceInstance.GenerateShortUrl(originalUrl).Result;
+
+            // Assert
+            Assert.IsNotNull(firstCall);
+            Assert.AreEqual(firstCall.ShortUrl, secondCall.ShortUrl);
         }
 
         [TestMethod]
@@ -58,10 +78,8 @@ namespace UrlShortenerAPI.Tests.Services
             _shortenerService.Setup(m => m.GenerateShortUrl(originalUrl))
                 .ReturnsAsync(new UrlResponse(originalUrl, shortUrl));
 
-            var serviceCall = new ShortenerService(_configuration, _cache);
-
             // Act
-            var result = serviceCall.GenerateShortUrl(originalUrl).Result;
+            var result = _shortenerServiceInstance.GenerateShortUrl(originalUrl).Result;
 
             // Assert
             Assert.IsNull(result);
@@ -75,10 +93,8 @@ namespace UrlShortenerAPI.Tests.Services
 
             _shortenerService.Setup(m => m.GetOriginalUrl(shortUrlId));
 
-            var serviceCall = new ShortenerService(_configuration, _cache);
-
             // Act
-            var result = serviceCall.GetOriginalUrl(shortUrlId).Result;
+            var result = _shortenerServiceInstance.GetOriginalUrl(shortUrlId).Result;
 
             // Assert
             Assert.IsNull(result);
@@ -94,21 +110,39 @@ namespace UrlShortenerAPI.Tests.Services
             _shortenerService.Setup(m => m.GenerateShortUrl(originalUrl))
                 .ReturnsAsync(new UrlResponse(originalUrl, shortUrl));
             
-            var serviceCall = new ShortenerService(_configuration, _cache);
-            
             // Act
-            var resultShortUrl = serviceCall.GenerateShortUrl(originalUrl).Result;
+            var resultShortUrl = _shortenerServiceInstance.GenerateShortUrl(originalUrl).Result;
 
-            
             // Arrange
             string shortUrlId = resultShortUrl.ShortUrl;
             _shortenerService.Setup(m => m.GetOriginalUrl(shortUrlId)).Returns(Task.FromResult(originalUrl));
             
             // Act
-            var resultOriginalUrl = serviceCall.GetOriginalUrl(shortUrlId).Result;
+            var resultOriginalUrl = _shortenerServiceInstance.GetOriginalUrl(shortUrlId).Result;
 
             // Assert
             Assert.AreEqual(resultOriginalUrl, originalUrl);
+        }
+
+        [TestMethod]
+        [Ignore]
+        public void ShouldGenerateUniqueIDByOriginalUrl()
+        {
+            string originalUrl = "www.google.com";
+            string expected = "28b83756bd7b0a1d";
+            int asciiStart = 31;
+
+            int index = originalUrl.Length - 1;
+            long hash = 0;
+            while (index >= 0)
+            {
+                hash = (hash * asciiStart) + originalUrl[index];
+                --index;
+            }
+
+            var result = hash.ToString("x");
+
+            Assert.AreEqual(expected, result);
         }
     }
 }

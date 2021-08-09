@@ -9,7 +9,7 @@ using UrlShortenerAPI.Services;
 namespace UrlShortenerAPI.Controllers_v1
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/")]
     public class ShortenerController : ControllerBase
     {
         private readonly IShortenerService _shortenerService;
