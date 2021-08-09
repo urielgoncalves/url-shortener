@@ -7,7 +7,7 @@ const App = () => {
     <main>
       <div className="App">
         <header className="App-header">
-          <Title>Winch.ly</Title>
+          <Title>W.ly</Title>
         </header>
         
           <Form />
