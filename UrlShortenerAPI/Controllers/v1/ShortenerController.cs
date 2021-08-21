@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortenerAPI.Models;
 using UrlShortenerAPI.Services;
@@ -19,6 +20,8 @@ namespace UrlShortenerAPI.Controllers_v1
             _shortenerService = shortenerService;
         }
 
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]UrlRequest urlRequest)
         {
@@ -29,7 +32,9 @@ namespace UrlShortenerAPI.Controllers_v1
 
             return Created(response?.ShortUrl, response);
         }
-
+       
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status302Found)]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
