@@ -30,6 +30,7 @@ app$ docker run --rm -p 3000:3000 url-shortener-app:dev
 
 
 ## Future improvements:
+-Add docker compose \
 -Validate url's \
 -Improve unique ID algorithm for URL's \
 -Add TTL for short URL's \
